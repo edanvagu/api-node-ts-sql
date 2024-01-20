@@ -65,10 +65,31 @@ const disableOperator = async (id: number) => {
   return response.rows[0];
 };
 
+const createAdmin = async (username: string, password: string) => {
+  const existingUser: QueryResult = await pool.query(
+    "SELECT * FROM users WHERE username = $1",
+    [username]
+  );
+  if (existingUser.rowCount) {
+    throw new Error("Username already exists");
+  }
+
+  const encryptedPassword = await encrypt(password);
+
+  const response: QueryResult = await pool.query(
+    "INSERT INTO users (username, password, role, change_password) VALUES ($1, $2, 'administrador', false) RETURNING *",
+    [username, encryptedPassword]
+  );
+  return {
+    user: response.rows[0],
+  };
+};
+
 export {
   getUserById,
   getAllUsers,
   createOperator,
   enableOperator,
   disableOperator,
+  createAdmin,
 };

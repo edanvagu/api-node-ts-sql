@@ -5,13 +5,13 @@ import {
   createOperatorController,
   enableOperatorController,
   disableOperatorController,
+  createAdminController,
 } from "../controllers/user.controller";
 import { sessionMiddleware } from "../middlewares/session.middleware";
 import {
   createOperatorValidator,
   enableOperatorValidator,
   disableOperatorValidator,
-  userIdValidator,
   getUserByIdValidator,
 } from "../validators/user.validator";
 
@@ -42,5 +42,6 @@ router.patch(
   disableOperatorValidator,
   disableOperatorController
 );
+router.post("/admin", createAdminController);
 
 export { router };

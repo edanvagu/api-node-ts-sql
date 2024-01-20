@@ -6,6 +6,7 @@ import {
   createOperator,
   enableOperator,
   disableOperator,
+  createAdmin,
 } from "../services/user.service";
 
 const getUserByIdController = async (req: Request, res: Response) => {
@@ -81,10 +82,28 @@ const disableOperatorController = async (req: Request, res: Response) => {
   }
 };
 
+const createAdminController = async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+    const user = await createAdmin(username, password);
+    res.status(200).json({
+      message: "Admin created successfully",
+      body: {
+        admin: {
+          username,
+        },
+      },
+    });
+  } catch (e: any) {
+    handdleError(res, e);
+  }
+};
+
 export {
   getUserByIdController,
   getAllUsersController,
   createOperatorController,
   enableOperatorController,
   disableOperatorController,
+  createAdminController,
 };
